@@ -5,4 +5,5 @@ export interface IUser {
     name: string;
     password: string;
     messages: Array<IMessage>;
+    avatar: string;
 }

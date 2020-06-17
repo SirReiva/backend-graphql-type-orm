@@ -15,6 +15,9 @@ export class UserType implements IUser {
 
     @Field(() => String, { nullable: false })
     password!: string;
+
+    @Field(() => String, { nullable: false })
+    avatar!: string;
 }
 
 @InputType()
@@ -24,4 +27,7 @@ export class CreateUserDto {
 
     @Field()
     password!: string;
+
+    @Field(() => String, { nullable: true })
+    avatar!: string;
 }

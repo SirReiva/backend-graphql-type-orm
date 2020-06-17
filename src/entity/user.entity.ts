@@ -35,6 +35,11 @@ export class UserEntity extends BaseEntity implements IUser {
     @OneToMany((type) => MessageEntity, (message) => message.from)
     messages!: MessageEntity[];
 
+    @Column({
+        default: 'nophoto.png',
+    })
+    avatar!: string;
+
     comparePassword(unencryptedPassword: string): Promise<boolean> {
         return bcrypt.compare(unencryptedPassword, this.password);
     }
