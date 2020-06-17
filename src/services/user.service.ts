@@ -1,30 +1,13 @@
-import { getRepository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 import { UserEntity } from '../entity/user.entity';
 import { IUser } from '../interfaces/user';
 
-/*
-async findAll(query): Promise<Paginate> {
-    const take = query.take || 10
-    const skip = query.skip || 0
-    const keyword = query.keyword || ''
-
-    const [result, total] = await this.userRepository.findAndCount(
-        {
-            where: { name: Like('%' + keyword + '%') }, order: { name: "DESC" },
-            take: take,
-            skip: skip
-        }
-    );
-
-    return {
-        data: result,
-        count: total
-    }
-}
-*/
-
 export class UserService {
-    private static userRepository = getRepository(UserEntity);
+    private static _repo: Repository<UserEntity> | null = null;
+    private static get userRepository() {
+        if (!UserService._repo) UserService._repo = getRepository(UserEntity);
+        return UserService._repo;
+    }
 
     static async createUser(input: Partial<IUser>): Promise<UserEntity> {
         return await UserService.userRepository
@@ -41,5 +24,16 @@ export class UserService {
         const user = await UserService.userRepository.findOneOrFail(id);
         UserService.userRepository.merge(user, input);
         return user.save();
+    }
+
+    static async getUsers(
+        page: number = 1,
+        pageSize: number = 10
+    ): Promise<[UserEntity[], number]> {
+        return await UserService.userRepository.findAndCount({
+            order: { name: 'DESC' },
+            take: pageSize,
+            skip: page,
+        });
     }
 }

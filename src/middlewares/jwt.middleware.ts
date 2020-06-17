@@ -14,7 +14,7 @@ const decodeToken = (token: string): Promise<Partial<IUser>> => {
     });
 };
 
-export const isAuth: MiddlewareFn<AuthExpressContext> = async (
+export const jwtAuth: MiddlewareFn<AuthExpressContext> = async (
     { context },
     next
 ) => {
