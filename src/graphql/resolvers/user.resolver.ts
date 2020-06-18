@@ -31,7 +31,7 @@ export class UserResolver {
         }
     }
 
-    @Mutation(() => Boolean)
+    @Mutation(() => ResponseGQLType)
     async updateProduct(
         @Arg('id', () => String) id: string,
         @Arg('fields', () => CreateUserDto)

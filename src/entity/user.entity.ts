@@ -7,9 +7,11 @@ import {
     Entity,
     OneToMany,
     PrimaryGeneratedColumn,
+    ManyToMany,
 } from 'typeorm';
 import { IUser } from '../interfaces/user';
 import { MessageEntity } from './message.entity';
+import { RoomEntity } from './room.entity';
 
 @Entity()
 export class UserEntity extends BaseEntity implements IUser {
@@ -39,6 +41,9 @@ export class UserEntity extends BaseEntity implements IUser {
         default: 'nophoto.png',
     })
     avatar!: string;
+
+    @ManyToMany((type) => RoomEntity, (room) => room.members)
+    rooms!: RoomEntity[];
 
     comparePassword(unencryptedPassword: string): Promise<boolean> {
         return bcrypt.compare(unencryptedPassword, this.password);

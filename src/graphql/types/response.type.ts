@@ -11,11 +11,6 @@ export class ResponseGQLType implements ResponseGQL {
     errors!: string[];
 }
 
-// const PaginateResultUnion = createUnionType({
-//   name: "ItemsResult", // the name of the GraphQL union
-//   types: () => [UserType] as const, // function that returns tuple of object types classes
-// });
-
 @ObjectType('PaginationResponse')
 export class PaginationResponse implements PaginatorResponseGQL {
     @Field(() => Int, { nullable: false })
@@ -30,3 +25,8 @@ export class PaginationResponse implements PaginatorResponseGQL {
     @Field(() => [UserType!], { nullable: false })
     items!: any[];
 }
+
+// const PaginateResultUnion = createUnionType({
+//     name: 'ItemsResult',
+//     types: () => [UserType, RoomType] as const,
+// });
