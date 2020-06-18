@@ -2,12 +2,11 @@ import bcrypt from 'bcrypt';
 import {
     BaseEntity,
     BeforeInsert,
-    BeforeUpdate,
     Column,
     Entity,
+    ManyToMany,
     OneToMany,
     PrimaryGeneratedColumn,
-    ManyToMany,
 } from 'typeorm';
 import { IUser } from '../interfaces/user';
 import { MessageEntity } from './message.entity';
@@ -21,9 +20,6 @@ export class UserEntity extends BaseEntity implements IUser {
         const hash = await bcrypt.hash(this.password, salt);
         this.password = hash;
     }
-
-    @BeforeUpdate()
-    updateDates() {}
 
     @PrimaryGeneratedColumn('uuid')
     id!: string;
