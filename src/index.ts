@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { startServer } from './app';
-import { connect } from './config/typeorm';
+import { connect } from './typeorm';
 
 async function main() {
     connect();

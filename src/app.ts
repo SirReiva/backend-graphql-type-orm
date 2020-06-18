@@ -13,6 +13,7 @@ export const startServer = async () => {
             validate: false,
         }),
         context: (context) => context,
+        formatError: (err) => err,
         engine: {
             rewriteError(err) {
                 return err;
