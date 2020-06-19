@@ -1,5 +1,5 @@
 import { IRoom } from '../../interfaces/room';
-import { ObjectType, ID, Field } from 'type-graphql';
+import { ObjectType, ID, Field, InputType } from 'type-graphql';
 import { UserType } from './user.type';
 import { MessageType } from './message.type';
 
@@ -16,4 +16,13 @@ export class RoomType implements IRoom {
 
     @Field(() => [MessageType], { nullable: false })
     messages!: MessageType[];
+}
+
+@InputType()
+export class CreateRoomDto {
+    @Field(() => String)
+    name!: string;
+
+    @Field(() => String)
+    creator!: string;
 }

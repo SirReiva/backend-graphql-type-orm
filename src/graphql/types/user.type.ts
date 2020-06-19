@@ -35,3 +35,12 @@ export class CreateUserDto {
     @Field(() => String, { nullable: true })
     avatar!: string;
 }
+
+@InputType()
+export class LoginDto {
+    @Field()
+    name!: string;
+
+    @Field()
+    password!: string;
+}

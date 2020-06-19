@@ -1,19 +1,27 @@
-import { Resolver, Mutation, Arg } from 'type-graphql';
-import { ResponseGQLType } from '../types/response.type';
-import { CreateMessageDto } from '../types/message.type';
-import { MessageService } from '../../services/message.service';
+import { Arg, Mutation, Resolver } from 'type-graphql';
 import { ResponseGQL } from '../../interfaces/response';
+import { MessageService } from '../../services/message.service';
+import { CreateMessageDto } from '../types/message.type';
+import { IMessage } from '../../interfaces/message';
+import { MessageResponse } from '../types/response.type';
 
 @Resolver()
 export class MessageResolver {
-    @Mutation(() => ResponseGQLType)
+    @Mutation(() => MessageResponse)
     async postMessage(
         @Arg('input', () => CreateMessageDto) input: CreateMessageDto
-    ): Promise<ResponseGQL> {
+    ): Promise<ResponseGQL<IMessage>> {
         try {
-            await MessageService.createMessage(input as any);
+            const result = await MessageService.createMessage(
+                input.from,
+                input.room,
+                {
+                    payload: input.payload,
+                }
+            );
             return {
                 flag: true,
+                result,
             };
         } catch (error) {
             return {

@@ -11,6 +11,8 @@ import {
 import { IUser } from '../interfaces/user';
 import { MessageEntity } from './message.entity';
 import { RoomEntity } from './room.entity';
+import jwt from 'jsonwebtoken';
+import config from '../config';
 
 @Entity()
 export class UserEntity extends BaseEntity implements IUser {
@@ -24,7 +26,9 @@ export class UserEntity extends BaseEntity implements IUser {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
-    @Column()
+    @Column({
+        unique: true,
+    })
     name!: string;
 
     @Column()
@@ -43,5 +47,18 @@ export class UserEntity extends BaseEntity implements IUser {
 
     comparePassword(unencryptedPassword: string): Promise<boolean> {
         return bcrypt.compare(unencryptedPassword, this.password);
+    }
+
+    generateJWT() {
+        return jwt.sign(
+            {
+                name: this.name,
+                avatar: this.avatar,
+            },
+            config.JWT_SECRET,
+            {
+                expiresIn: config.JWT_LIFE,
+            }
+        );
     }
 }
