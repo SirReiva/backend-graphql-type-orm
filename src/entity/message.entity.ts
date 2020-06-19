@@ -8,17 +8,18 @@ import {
 } from 'typeorm';
 import { IMessage } from '../interfaces/message';
 import { UserEntity } from './user.entity';
+import { RoomEntity } from './room.entity';
 
 @Entity()
 export class MessageEntity extends BaseEntity implements IMessage {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
 
-    @ManyToOne((type) => UserEntity, (user) => user.messages)
-    from!: UserEntity;
+    @ManyToOne((type) => RoomEntity, (room) => room)
+    room!: RoomEntity;
 
     @ManyToOne((type) => UserEntity, (user) => user.messages)
-    to!: UserEntity;
+    from!: UserEntity;
 
     @Column()
     payload!: string;

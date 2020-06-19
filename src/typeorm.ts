@@ -9,7 +9,7 @@ const opts: MysqlConnectionOptions = {
     username: 'root',
     password: 'root',
     database: 'chat',
-    entities: [path.join(__dirname, '../entity/**/**.ts')],
+    entities: [path.join(__dirname, './entity/**/**.ts')],
     synchronize: true,
 };
 
