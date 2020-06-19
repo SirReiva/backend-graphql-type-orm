@@ -1,33 +1,31 @@
 {
-  "name": "graphql-typeorm-apollo",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "nodemon src/index.ts --exec ts-node"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "apollo-server-express": "^2.12.0",
-    "bcrypt": "^5.0.0",
-    "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "mysql": "^2.18.1",
-    "reflect-metadata": "^0.1.13",
-    "socket.io": "^2.3.0",
-    "socket.io-p2p-server": "^1.2.0",
-    "type-graphql": "^0.17.6",
-    "typeorm": "^0.2.24"
-  },
-  "devDependencies": {
-    "@types/bcrypt": "^3.0.0",
-    "@types/express": "^4.17.6",
-    "@types/jsonwebtoken": "^8.5.0",
-    "@types/node": "^13.13.0",
-    "nodemon": "^2.0.3",
-    "ts-node": "^8.8.2",
-    "typescript": "^3.8.3"
-  }
+    "name": "graphql-typeorm-apollo",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon src/index.ts --exec ts-node"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "apollo-server-express": "^2.15.0",
+        "bcrypt": "^5.0.0",
+        "express": "^4.17.1",
+        "jsonwebtoken": "^8.5.1",
+        "mysql": "^2.18.1",
+        "reflect-metadata": "^0.1.13",
+        "type-graphql": "^1.0.0-rc.2",
+        "typeorm": "^0.2.25"
+    },
+    "devDependencies": {
+        "@types/bcrypt": "^3.0.0",
+        "@types/express": "^4.17.6",
+        "@types/jsonwebtoken": "^8.5.0",
+        "@types/node": "^14.0.13",
+        "nodemon": "^2.0.4",
+        "ts-node": "^8.10.2",
+        "typescript": "^3.9.5"
+    }
 }
