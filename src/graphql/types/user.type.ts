@@ -11,9 +11,6 @@ export class UserType implements IUser {
     @Field(() => String, { nullable: false })
     name!: string;
 
-    @Field(() => String, { nullable: false })
-    password!: string;
-
     @Field(() => [MessageType], { nullable: false })
     messages!: MessageType[];
 

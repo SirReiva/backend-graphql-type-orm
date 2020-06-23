@@ -7,7 +7,7 @@ import { RoomType } from './room.type';
 function SingleResponse<TItem>(TItemClass: ClassType<TItem>) {
     @ObjectType({ isAbstract: true })
     abstract class ResponseClass implements ResponseGQL<TItem> {
-        @Field((type) => TItemClass)
+        @Field((type) => TItemClass, { nullable: true })
         result!: TItem;
 
         @Field(() => Boolean)

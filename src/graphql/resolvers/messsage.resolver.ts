@@ -1,11 +1,13 @@
-import { Arg, Mutation, Resolver } from 'type-graphql';
+import { Arg, Mutation, Resolver, FieldResolver, Root } from 'type-graphql';
 import { ResponseGQL } from '../../interfaces/response';
 import { MessageService } from '../../services/message.service';
-import { CreateMessageDto } from '../types/message.type';
+import { CreateMessageDto, MessageType } from '../types/message.type';
 import { IMessage } from '../../interfaces/message';
 import { MessageResponse } from '../types/response.type';
+import { RoomService } from '../../services/room.service';
+import { UserService } from '../../services/user.service';
 
-@Resolver()
+@Resolver(() => MessageType)
 export class MessageResolver {
     @Mutation(() => MessageResponse)
     async postMessage(
@@ -29,5 +31,15 @@ export class MessageResolver {
                 errors: [error],
             };
         }
+    }
+
+    @FieldResolver()
+    room(@Root() message: any) {
+        return RoomService.getRoomById(message.room);
+    }
+
+    @FieldResolver()
+    from(@Root() message: any) {
+        return UserService.getUserById(message.from);
     }
 }

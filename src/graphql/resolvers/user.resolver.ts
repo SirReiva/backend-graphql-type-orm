@@ -1,23 +1,26 @@
 import {
     Arg,
-    Mutation,
-    Resolver,
+    FieldResolver,
     Int,
+    Mutation,
     Query,
+    Resolver,
+    Root,
     UseMiddleware,
 } from 'type-graphql';
-import { ResponseGQL, PaginatorResponseGQL } from '../../interfaces/response';
+import { PaginatorResponseGQL, ResponseGQL } from '../../interfaces/response';
+import { IUser } from '../../interfaces/user';
+import { jwtAuth } from '../../middlewares/jwt.middleware';
+import { RoomService } from '../../services/room.service';
 import { UserService } from '../../services/user.service';
 import {
-    UserResponse,
-    PaginationUserResponse,
     JWTResponse,
+    PaginationUserResponse,
+    UserResponse,
 } from '../types/response.type';
-import { CreateUserDto, LoginDto } from '../types/user.type';
-import { jwtAuth } from '../../middlewares/jwt.middleware';
-import { IUser } from '../../interfaces/user';
+import { CreateUserDto, LoginDto, UserType } from '../types/user.type';
 
-@Resolver()
+@Resolver(() => UserType)
 export class UserResolver {
     @Mutation(() => UserResponse)
     async createUser(
@@ -25,7 +28,24 @@ export class UserResolver {
     ): Promise<ResponseGQL<IUser>> {
         try {
             const result = await UserService.createUser(input);
-            result.password = '';
+            return {
+                flag: true,
+                result,
+            };
+        } catch (error) {
+            return {
+                flag: false,
+                errors: [error],
+            };
+        }
+    }
+
+    @Query(() => UserResponse)
+    async getUserById(
+        @Arg('id', () => String) id: string
+    ): Promise<ResponseGQL<IUser>> {
+        try {
+            const result = await UserService.getUserById(id);
             return {
                 flag: true,
                 result,
@@ -59,14 +79,13 @@ export class UserResolver {
 
     @Mutation(() => UserResponse)
     @UseMiddleware(jwtAuth)
-    async updateProduct(
+    async updateUser(
         @Arg('id', () => String) id: string,
         @Arg('input', () => CreateUserDto)
         input: CreateUserDto
     ): Promise<ResponseGQL<IUser>> {
         try {
             const result = await UserService.updateUser(id, input);
-            result.password = '';
             return {
                 flag: true,
                 result,
@@ -81,7 +100,7 @@ export class UserResolver {
 
     @Query(() => PaginationUserResponse)
     @UseMiddleware(jwtAuth)
-    async products(
+    async users(
         @Arg('page', () => Int, { defaultValue: 1 }) page: number,
         @Arg('size', () => Int, { defaultValue: 10 }) pageSize: number
     ): Promise<PaginatorResponseGQL<IUser>> {
@@ -92,5 +111,12 @@ export class UserResolver {
             page,
             pageSize,
         };
+    }
+
+    @FieldResolver()
+    rooms(@Root() user: any) {
+        return Promise.all(
+            user.rooms.map((room: string) => RoomService.getRoomById(room))
+        );
     }
 }

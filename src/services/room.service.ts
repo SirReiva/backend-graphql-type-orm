@@ -1,8 +1,10 @@
-import { Repository, getRepository } from 'typeorm';
+import { Repository } from 'typeorm';
+import { InjectRepo } from '../decorators';
 import { RoomEntity } from '../entity/room.entity';
 import { IRoom } from '../interfaces/room';
 import { UserService } from './user.service';
-import { InjectRepo } from '../decorators';
+import { isNumber } from 'util';
+import { UserEntity } from '../entity/user.entity';
 
 export class RoomService {
     @InjectRepo(RoomEntity)
@@ -24,6 +26,26 @@ export class RoomService {
     }
 
     static async getRoomById(id: string): Promise<RoomEntity> {
-        return await RoomService.roomRepository.findOneOrFail(id);
+        return await RoomService.roomRepository.findOneOrFail(id, {
+            loadRelationIds: true,
+        });
+    }
+
+    static async getRoomByIdAndUser(
+        idRoom: string,
+        user: UserEntity,
+        relations: string[] = []
+    ) {
+        return await RoomService.roomRepository.findOneOrFail(idRoom, {
+            relations: [...relations, 'members'],
+            where: {
+                members: user,
+            },
+        });
+    }
+
+    static async deleteRoom(id: string): Promise<Boolean> {
+        const res = await RoomService.roomRepository.delete(id);
+        return isNumber(res.affected) && res.affected > 0;
     }
 }

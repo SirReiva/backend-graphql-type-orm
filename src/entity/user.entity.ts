@@ -31,7 +31,7 @@ export class UserEntity extends BaseEntity implements IUser {
     })
     name!: string;
 
-    @Column()
+    @Column({ select: false })
     password!: string;
 
     @OneToMany((type) => MessageEntity, (message) => message.from)

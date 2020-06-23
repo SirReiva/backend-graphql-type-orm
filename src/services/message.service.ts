@@ -1,9 +1,9 @@
-import { Repository, getRepository } from 'typeorm';
+import { Repository } from 'typeorm';
+import { InjectRepo } from '../decorators';
 import { MessageEntity } from '../entity/message.entity';
 import { IMessage } from '../interfaces/message';
-import { UserService } from './user.service';
 import { RoomService } from './room.service';
-import { InjectRepo } from '../decorators';
+import { UserService } from './user.service';
 
 export class MessageService {
     @InjectRepo(MessageEntity)
@@ -28,9 +28,16 @@ export class MessageService {
 
     static async getMesssgesByRoom(id: string) {
         return await MessageService.messageRepository.findAndCount({
+            loadRelationIds: true,
             where: {
                 room: id,
             },
+        });
+    }
+
+    static async getMessageById(id: string) {
+        return await MessageService.messageRepository.findOneOrFail(id, {
+            loadRelationIds: true,
         });
     }
 }

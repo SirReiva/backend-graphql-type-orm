@@ -1,7 +1,7 @@
-import { getRepository, Repository, In } from 'typeorm';
+import { In, Repository } from 'typeorm';
+import { InjectRepo } from '../decorators';
 import { UserEntity } from '../entity/user.entity';
 import { IUser } from '../interfaces/user';
-import { InjectRepo } from '../decorators';
 
 export class UserService {
     @InjectRepo(UserEntity)
@@ -36,7 +36,9 @@ export class UserService {
     }
 
     static async getUserById(id: string): Promise<UserEntity> {
-        return await UserService.userRepository.findOneOrFail(id);
+        return await UserService.userRepository.findOneOrFail(id, {
+            loadRelationIds: true,
+        });
     }
 
     static async getUsersByRoom(id: string) {
