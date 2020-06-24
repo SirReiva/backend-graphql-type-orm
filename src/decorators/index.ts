@@ -4,8 +4,8 @@ export const InjectRepo = (entity: Function) => (target: any, key: string) => {
     const sKey = Symbol(key);
     Object.defineProperty(target, key, {
         get: function () {
-            if (!this[sKey]) this[sKey] = getRepository(entity);
-            return this[sKey];
+            if (!target[sKey]) target[sKey] = getRepository(entity);
+            return target[sKey];
         },
     });
 };

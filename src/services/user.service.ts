@@ -8,11 +8,11 @@ export class UserService {
     private static userRepository: Repository<UserEntity>;
 
     static async createUser(input: Partial<IUser>): Promise<UserEntity> {
-        return await UserService.userRepository
-            .create({
-                ...input,
-            })
-            .save();
+        const user = await UserService.userRepository.create({
+            ...input,
+        });
+        await user.save();
+        return await UserService.getUserById(user.id);
     }
 
     static async updateUser(

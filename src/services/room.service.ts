@@ -16,13 +16,13 @@ export class RoomService {
     ): Promise<RoomEntity> {
         const creator = await UserService.getUserById(idUser);
 
-        return await RoomService.roomRepository
-            .create({
-                ...input,
-                members: [creator],
-                messages: [],
-            })
-            .save();
+        const room = await RoomService.roomRepository.create({
+            ...input,
+            members: [creator],
+            messages: [],
+        });
+        await room.save();
+        return await RoomService.getRoomById(room.id);
     }
 
     static async getRoomById(id: string): Promise<RoomEntity> {

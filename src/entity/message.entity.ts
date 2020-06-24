@@ -16,10 +16,10 @@ export class MessageEntity extends BaseEntity implements IMessage {
     id!: string;
 
     @ManyToOne((type) => RoomEntity, (room) => room)
-    room!: RoomEntity;
+    room!: RoomEntity | string;
 
     @ManyToOne((type) => UserEntity, (user) => user.messages)
-    from!: UserEntity;
+    from!: UserEntity | string;
 
     @Column()
     payload!: string;

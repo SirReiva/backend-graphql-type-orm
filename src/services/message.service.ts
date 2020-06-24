@@ -17,13 +17,13 @@ export class MessageService {
         const from = await UserService.getUserById(idUser);
         const room = await RoomService.getRoomById(idRoom);
 
-        return await MessageService.messageRepository
-            .create({
-                ...messge,
-                from,
-                room,
-            })
-            .save();
+        const message = await MessageService.messageRepository.create({
+            ...messge,
+            from,
+            room,
+        });
+        await message.save();
+        return await MessageService.getMessageById(message.id);
     }
 
     static async getMesssgesByRoom(id: string) {

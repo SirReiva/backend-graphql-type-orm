@@ -13,14 +13,13 @@ import { RoomResponse } from '../types/response.type';
 import { CreateRoomDto, RoomType } from '../types/room.type';
 import { UserService } from '../../services/user.service';
 import { MessageService } from '../../services/message.service';
+import { RoomEntity } from '../../entity/room.entity';
+import { UserEntity } from '../../entity/user.entity';
+import { MessageEntity } from '../../entity/message.entity';
+import { reloadEntity } from '../../utils';
 
 @Resolver(() => RoomType)
 export class RoomResolver {
-    @Query(() => String)
-    hello() {
-        return 'hello';
-    }
-
     @Mutation(() => RoomResponse)
     async createRoom(
         @Arg('input', () => CreateRoomDto) input: CreateRoomDto
@@ -68,17 +67,23 @@ export class RoomResolver {
     }
 
     @FieldResolver()
-    members(@Root() room: any) {
+    async members(@Root() room: RoomEntity) {
         return Promise.all(
-            room.members.map((uId: string) => UserService.getUserById(uId))
+            room.members.map((input) =>
+                input instanceof UserEntity
+                    ? reloadEntity(input)
+                    : UserService.getUserById(input)
+            )
         );
     }
 
     @FieldResolver()
-    messages(@Root() room: any) {
+    messages(@Root() room: RoomEntity) {
         return Promise.all(
-            room.messages.map((mId: string) =>
-                MessageService.getMessageById(mId)
+            room.messages.map((input) =>
+                input instanceof MessageEntity
+                    ? reloadEntity(input)
+                    : MessageService.getMessageById(input)
             )
         );
     }

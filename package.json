@@ -4,7 +4,10 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "nodemon src/index.ts --exec ts-node"
+        "dev": "nodemon src/index.ts --exec ts-node",
+        "debug": "nodemon --exec node --inspect-brk -r ts-node/register src/index.ts",
+        "build": "tsc -p tsconfig.json",
+        "run": "node dist/index.js"
     },
     "keywords": [],
     "author": "",
@@ -12,6 +15,7 @@
     "dependencies": {
         "apollo-server-express": "^2.15.0",
         "bcrypt": "^5.0.0",
+        "class-validator": "^0.12.2",
         "express": "^4.17.1",
         "graphql": "^15.1.0",
         "jsonwebtoken": "^8.5.1",

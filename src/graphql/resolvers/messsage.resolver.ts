@@ -6,6 +6,10 @@ import { IMessage } from '../../interfaces/message';
 import { MessageResponse } from '../types/response.type';
 import { RoomService } from '../../services/room.service';
 import { UserService } from '../../services/user.service';
+import { MessageEntity } from '../../entity/message.entity';
+import { RoomEntity } from '../../entity/room.entity';
+import { UserEntity } from '../../entity/user.entity';
+import { reloadEntity } from '../../utils';
 
 @Resolver(() => MessageType)
 export class MessageResolver {
@@ -34,12 +38,16 @@ export class MessageResolver {
     }
 
     @FieldResolver()
-    room(@Root() message: any) {
-        return RoomService.getRoomById(message.room);
+    room(@Root() message: MessageEntity) {
+        return message.room instanceof RoomEntity
+            ? reloadEntity(message.room)
+            : RoomService.getRoomById(message.room);
     }
 
     @FieldResolver()
-    from(@Root() message: any) {
-        return UserService.getUserById(message.from);
+    from(@Root() message: MessageEntity) {
+        return message.from instanceof UserEntity
+            ? reloadEntity(message.from)
+            : UserService.getUserById(message.from);
     }
 }

@@ -35,7 +35,7 @@ export class UserEntity extends BaseEntity implements IUser {
     password!: string;
 
     @OneToMany((type) => MessageEntity, (message) => message.from)
-    messages!: MessageEntity[];
+    messages!: (MessageEntity | string)[];
 
     @Column({
         default: 'nophoto.png',
@@ -43,7 +43,7 @@ export class UserEntity extends BaseEntity implements IUser {
     avatar!: string;
 
     @ManyToMany((type) => RoomEntity, (room) => room.members)
-    rooms!: RoomEntity[];
+    rooms!: (RoomEntity | string)[];
 
     comparePassword(unencryptedPassword: string): Promise<boolean> {
         return bcrypt.compare(unencryptedPassword, this.password);

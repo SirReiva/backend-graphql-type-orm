@@ -19,6 +19,9 @@ import {
     UserResponse,
 } from '../types/response.type';
 import { CreateUserDto, LoginDto, UserType } from '../types/user.type';
+import { UserEntity } from '../../entity/user.entity';
+import { RoomEntity } from '../../entity/room.entity';
+import { reloadEntity } from '../../utils';
 
 @Resolver(() => UserType)
 export class UserResolver {
@@ -114,9 +117,13 @@ export class UserResolver {
     }
 
     @FieldResolver()
-    rooms(@Root() user: any) {
+    rooms(@Root() user: UserEntity) {
         return Promise.all(
-            user.rooms.map((room: string) => RoomService.getRoomById(room))
+            user.rooms.map((input) =>
+                input instanceof RoomEntity
+                    ? reloadEntity(input)
+                    : RoomService.getRoomById(input)
+            )
         );
     }
 }

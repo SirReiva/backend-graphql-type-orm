@@ -23,8 +23,8 @@ export class RoomEntity extends BaseEntity implements IRoom {
         cascade: true,
     })
     @JoinTable()
-    members!: UserEntity[];
+    members!: (UserEntity | string)[];
 
     @OneToMany((type) => MessageEntity, (message) => message.room)
-    messages!: MessageEntity[];
+    messages!: (MessageEntity | string)[];
 }

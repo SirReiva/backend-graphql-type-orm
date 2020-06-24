@@ -5,7 +5,7 @@ export interface IUser {
     id: string;
     name: string;
     password?: string;
-    messages: Array<IMessage>;
+    messages: (IMessage | string)[];
     avatar: string;
-    rooms: IRoom[];
+    rooms: (IRoom | string)[];
 }
