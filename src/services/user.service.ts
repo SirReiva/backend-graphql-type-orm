@@ -51,6 +51,7 @@ export class UserService {
 
     static async login(name: string, password: string): Promise<string> {
         const user = await UserService.userRepository.findOneOrFail(undefined, {
+            select: ['password', 'name'],
             where: {
                 name,
             },

@@ -53,7 +53,6 @@ export class UserEntity extends BaseEntity implements IUser {
         return jwt.sign(
             {
                 name: this.name,
-                avatar: this.avatar,
             },
             config.JWT_SECRET,
             {
