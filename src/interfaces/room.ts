@@ -5,5 +5,10 @@ export interface IRoom {
     id: string;
     name: string;
     members: (IUser | string)[];
-    messages: (IMessage | string)[];
+    messages?: (IMessage | string)[];
+}
+
+export interface IResolverRoom extends IRoom {
+    messages?: string[];
+    members: string[];
 }

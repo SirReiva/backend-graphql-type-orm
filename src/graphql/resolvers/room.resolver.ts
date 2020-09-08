@@ -1,22 +1,18 @@
 import {
     Arg,
+    FieldResolver,
     Mutation,
     Query,
     Resolver,
-    FieldResolver,
     Root,
 } from 'type-graphql';
 import { ResponseGQL } from '../../interfaces/response';
-import { IRoom } from '../../interfaces/room';
+import { IResolverRoom, IRoom } from '../../interfaces/room';
+import { MessageService } from '../../services/message.service';
 import { RoomService } from '../../services/room.service';
+import { UserService } from '../../services/user.service';
 import { RoomResponse } from '../types/response.type';
 import { CreateRoomDto, RoomType } from '../types/room.type';
-import { UserService } from '../../services/user.service';
-import { MessageService } from '../../services/message.service';
-import { RoomEntity } from '../../entity/room.entity';
-import { UserEntity } from '../../entity/user.entity';
-import { MessageEntity } from '../../entity/message.entity';
-import { reloadEntity } from '../../utils';
 
 @Resolver(() => RoomType)
 export class RoomResolver {
@@ -25,11 +21,12 @@ export class RoomResolver {
         @Arg('input', () => CreateRoomDto) input: CreateRoomDto
     ): Promise<ResponseGQL<IRoom>> {
         try {
-            await RoomService.createRoom(input.creator, {
+            const result = await RoomService.createRoom(input.creator, {
                 name: input.name,
             });
             return {
                 flag: true,
+                result,
             };
         } catch (error) {
             return {
@@ -67,24 +64,13 @@ export class RoomResolver {
     }
 
     @FieldResolver()
-    async members(@Root() room: RoomEntity) {
-        return Promise.all(
-            room.members.map((input) =>
-                input instanceof UserEntity
-                    ? reloadEntity(input)
-                    : UserService.getUserById(input)
-            )
-        );
+    members(@Root() room: IResolverRoom) {
+        return UserService.getUsersByIds(room.members);
     }
 
     @FieldResolver()
-    messages(@Root() room: RoomEntity) {
-        return Promise.all(
-            room.messages.map((input) =>
-                input instanceof MessageEntity
-                    ? reloadEntity(input)
-                    : MessageService.getMessageById(input)
-            )
-        );
+    messages(@Root() room: IResolverRoom) {
+        if (!room.messages) return [];
+        return MessageService.getMessagessByIds(room.messages);
     }
 }

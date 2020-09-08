@@ -24,25 +24,25 @@ export class UserService {
         return user.save();
     }
 
-    static async getUsers(
+    static getUsers(
         page: number = 1,
         pageSize: number = 10
     ): Promise<[UserEntity[], number]> {
-        return await UserService.userRepository.findAndCount({
+        return UserService.userRepository.findAndCount({
             order: { name: 'DESC' },
             take: pageSize,
             skip: page,
         });
     }
 
-    static async getUserById(id: string): Promise<UserEntity> {
-        return await UserService.userRepository.findOneOrFail(id, {
+    static getUserById(id: string): Promise<UserEntity> {
+        return UserService.userRepository.findOneOrFail(id, {
             loadRelationIds: true,
         });
     }
 
-    static async getUsersByRoom(id: string) {
-        return await UserService.userRepository.findAndCount({
+    static getUsersByRoom(id: string) {
+        return UserService.userRepository.findAndCount({
             where: {
                 rooms: In([id]),
             },
@@ -50,6 +50,9 @@ export class UserService {
     }
 
     static async login(name: string, password: string): Promise<string> {
+        const query = UserService.userRepository.createQueryBuilder();
+        query.where('user.id = :id', { id: 1 });
+
         const user = await UserService.userRepository.findOneOrFail(undefined, {
             select: ['password', 'name'],
             where: {
@@ -60,5 +63,11 @@ export class UserService {
             throw new Error('Error login');
         }
         return user.generateJWT();
+    }
+
+    static getUsersByIds(ids: string[]) {
+        return UserService.userRepository.findByIds(ids, {
+            loadRelationIds: true,
+        });
     }
 }

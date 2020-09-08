@@ -26,8 +26,8 @@ export class MessageService {
         return await MessageService.getMessageById(message.id);
     }
 
-    static async getMesssgesByRoom(id: string) {
-        return await MessageService.messageRepository.findAndCount({
+    static getMesssgesByRoom(id: string) {
+        return MessageService.messageRepository.findAndCount({
             loadRelationIds: true,
             where: {
                 room: id,
@@ -35,8 +35,14 @@ export class MessageService {
         });
     }
 
-    static async getMessageById(id: string) {
-        return await MessageService.messageRepository.findOneOrFail(id, {
+    static getMessageById(id: string) {
+        return MessageService.messageRepository.findOneOrFail(id, {
+            loadRelationIds: true,
+        });
+    }
+
+    static getMessagessByIds(ids: string[]) {
+        return MessageService.messageRepository.findByIds(ids, {
             loadRelationIds: true,
         });
     }

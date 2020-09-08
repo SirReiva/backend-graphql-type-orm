@@ -25,18 +25,18 @@ export class RoomService {
         return await RoomService.getRoomById(room.id);
     }
 
-    static async getRoomById(id: string): Promise<RoomEntity> {
-        return await RoomService.roomRepository.findOneOrFail(id, {
+    static getRoomById(id: string): Promise<RoomEntity> {
+        return RoomService.roomRepository.findOneOrFail(id, {
             loadRelationIds: true,
         });
     }
 
-    static async getRoomByIdAndUser(
+    static getRoomByIdAndUser(
         idRoom: string,
         user: UserEntity,
         relations: string[] = []
     ) {
-        return await RoomService.roomRepository.findOneOrFail(idRoom, {
+        return RoomService.roomRepository.findOneOrFail(idRoom, {
             relations: [...relations, 'members'],
             where: {
                 members: user,
@@ -47,5 +47,11 @@ export class RoomService {
     static async deleteRoom(id: string): Promise<Boolean> {
         const res = await RoomService.roomRepository.delete(id);
         return isNumber(res.affected) && res.affected > 0;
+    }
+
+    static getRoomsByIds(ids: string[]) {
+        return RoomService.roomRepository.findByIds(ids, {
+            loadRelationIds: true,
+        });
     }
 }

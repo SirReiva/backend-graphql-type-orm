@@ -1,15 +1,11 @@
-import { Arg, Mutation, Resolver, FieldResolver, Root } from 'type-graphql';
+import { Arg, FieldResolver, Mutation, Resolver, Root } from 'type-graphql';
+import { IMessage, IResolverMessage } from '../../interfaces/message';
 import { ResponseGQL } from '../../interfaces/response';
 import { MessageService } from '../../services/message.service';
-import { CreateMessageDto, MessageType } from '../types/message.type';
-import { IMessage } from '../../interfaces/message';
-import { MessageResponse } from '../types/response.type';
 import { RoomService } from '../../services/room.service';
 import { UserService } from '../../services/user.service';
-import { MessageEntity } from '../../entity/message.entity';
-import { RoomEntity } from '../../entity/room.entity';
-import { UserEntity } from '../../entity/user.entity';
-import { reloadEntity } from '../../utils';
+import { CreateMessageDto, MessageType } from '../types/message.type';
+import { MessageResponse } from '../types/response.type';
 
 @Resolver(() => MessageType)
 export class MessageResolver {
@@ -38,16 +34,12 @@ export class MessageResolver {
     }
 
     @FieldResolver()
-    room(@Root() message: MessageEntity) {
-        return message.room instanceof RoomEntity
-            ? reloadEntity(message.room)
-            : RoomService.getRoomById(message.room);
+    room(@Root() message: IResolverMessage) {
+        return RoomService.getRoomById(message.id);
     }
 
     @FieldResolver()
-    from(@Root() message: MessageEntity) {
-        return message.from instanceof UserEntity
-            ? reloadEntity(message.from)
-            : UserService.getUserById(message.from);
+    from(@Root() message: IResolverMessage) {
+        return UserService.getUserById(message.id);
     }
 }

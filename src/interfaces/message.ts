@@ -8,3 +8,8 @@ export interface IMessage {
     payload: string;
     createdAt: string;
 }
+
+export interface IResolverMessage extends IMessage {
+    from: string;
+    room: string;
+}

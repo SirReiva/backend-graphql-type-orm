@@ -1,5 +1,6 @@
 import {
     Arg,
+    Ctx,
     FieldResolver,
     Int,
     Mutation,
@@ -8,8 +9,9 @@ import {
     Root,
     UseMiddleware,
 } from 'type-graphql';
+import { AuthExpressContext } from '../../interfaces/authExpressContext';
 import { PaginatorResponseGQL, ResponseGQL } from '../../interfaces/response';
-import { IUser } from '../../interfaces/user';
+import { IResolverUser, IUser } from '../../interfaces/user';
 import { jwtAuth } from '../../middlewares/jwt.middleware';
 import { RoomService } from '../../services/room.service';
 import { UserService } from '../../services/user.service';
@@ -19,9 +21,6 @@ import {
     UserResponse,
 } from '../types/response.type';
 import { CreateUserDto, LoginDto, UserType } from '../types/user.type';
-import { UserEntity } from '../../entity/user.entity';
-import { RoomEntity } from '../../entity/room.entity';
-import { reloadEntity } from '../../utils';
 
 @Resolver(() => UserType)
 export class UserResolver {
@@ -85,7 +84,8 @@ export class UserResolver {
     async updateUser(
         @Arg('id', () => String) id: string,
         @Arg('input', () => CreateUserDto)
-        input: CreateUserDto
+        input: CreateUserDto,
+        @Ctx() ctx: AuthExpressContext
     ): Promise<ResponseGQL<IUser>> {
         try {
             const result = await UserService.updateUser(id, input);
@@ -102,10 +102,10 @@ export class UserResolver {
     }
 
     @Query(() => PaginationUserResponse)
-    @UseMiddleware(jwtAuth)
     async users(
         @Arg('page', () => Int, { defaultValue: 1 }) page: number,
-        @Arg('size', () => Int, { defaultValue: 10 }) pageSize: number
+        @Arg('size', () => Int, { defaultValue: 10 }) pageSize: number,
+        @Ctx() ctx: AuthExpressContext
     ): Promise<PaginatorResponseGQL<IUser>> {
         const [items, total] = await UserService.getUsers(page, pageSize);
         return {
@@ -117,13 +117,8 @@ export class UserResolver {
     }
 
     @FieldResolver()
-    rooms(@Root() user: UserEntity) {
-        return Promise.all(
-            user.rooms.map((input) =>
-                input instanceof RoomEntity
-                    ? reloadEntity(input)
-                    : RoomService.getRoomById(input)
-            )
-        );
+    rooms(@Root() user: IResolverUser) {
+        if (!user.rooms) return [];
+        return RoomService.getRoomsByIds(user.rooms);
     }
 }

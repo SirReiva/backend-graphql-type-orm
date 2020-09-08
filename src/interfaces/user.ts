@@ -7,5 +7,9 @@ export interface IUser {
     password?: string;
     messages: (IMessage | string)[];
     avatar: string;
-    rooms: (IRoom | string)[];
+    rooms?: (IRoom | string)[];
+}
+
+export interface IResolverUser extends IUser {
+    rooms?: string[];
 }
