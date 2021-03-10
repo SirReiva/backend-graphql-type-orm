@@ -1,1 +1,1 @@
-# Boilerplate TypeOrm & TypeGraphQl
+# Boilerplate TypeOrm & TypeGraphQl & MySql
