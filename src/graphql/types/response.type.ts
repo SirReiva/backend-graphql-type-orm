@@ -5,36 +5,36 @@ import { MessageType } from './message.type';
 import { RoomType } from './room.type';
 
 function SingleResponse<TItem>(TItemClass: ClassType<TItem>) {
-    @ObjectType({ isAbstract: true })
-    abstract class ResponseClass implements ResponseGQL<TItem> {
-        @Field((type) => TItemClass, { nullable: true })
-        result!: TItem;
+	@ObjectType({ isAbstract: true })
+	abstract class ResponseClass implements ResponseGQL<TItem> {
+		@Field(type => TItemClass, { nullable: true })
+		result!: TItem;
 
-        @Field(() => Boolean)
-        flag!: boolean;
+		@Field(() => Boolean)
+		flag!: boolean;
 
-        @Field(() => [String], { nullable: true })
-        errors!: string[];
-    }
-    return ResponseClass;
+		@Field(() => [String], { nullable: true })
+		errors!: string[];
+	}
+	return ResponseClass;
 }
 
 function PaginateResponse<TItem>(TItemClass: ClassType<TItem>) {
-    @ObjectType({ isAbstract: true })
-    abstract class ResponseClass implements PaginatorResponseGQL<TItem> {
-        @Field(() => Int, { nullable: false })
-        page!: number;
+	@ObjectType({ isAbstract: true })
+	abstract class ResponseClass implements PaginatorResponseGQL<TItem> {
+		@Field(() => Int, { nullable: false })
+		page!: number;
 
-        @Field(() => Int, { nullable: false })
-        pageSize!: number;
+		@Field(() => Int, { nullable: false })
+		pageSize!: number;
 
-        @Field(() => Int, { nullable: false })
-        total!: number;
+		@Field(() => Int, { nullable: false })
+		total!: number;
 
-        @Field(() => [UserType!], { nullable: false })
-        items!: TItem[];
-    }
-    return ResponseClass;
+		@Field(() => [UserType!], { nullable: false })
+		items!: TItem[];
+	}
+	return ResponseClass;
 }
 
 @ObjectType('UserResponse')
@@ -54,7 +54,7 @@ export class PaginationUserResponse extends PaginateResponse(UserType) {}
 
 @ObjectType('PaginationMessgeResponse')
 export class PaginationMessgeResponse extends PaginateResponse(
-    MessageResponse
+	MessageResponse
 ) {}
 
 @ObjectType('PaginationRoomResponse')

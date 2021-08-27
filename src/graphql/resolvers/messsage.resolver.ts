@@ -9,37 +9,37 @@ import { MessageResponse } from '../types/response.type';
 
 @Resolver(() => MessageType)
 export class MessageResolver {
-    @Mutation(() => MessageResponse)
-    async postMessage(
-        @Arg('input', () => CreateMessageDto) input: CreateMessageDto
-    ): Promise<ResponseGQL<IMessage>> {
-        try {
-            const result = await MessageService.createMessage(
-                input.from,
-                input.room,
-                {
-                    payload: input.payload,
-                }
-            );
-            return {
-                flag: true,
-                result,
-            };
-        } catch (error) {
-            return {
-                flag: false,
-                errors: [error],
-            };
-        }
-    }
+	@Mutation(() => MessageResponse)
+	async postMessage(
+		@Arg('input', () => CreateMessageDto) input: CreateMessageDto
+	): Promise<ResponseGQL<IMessage>> {
+		try {
+			const result = await MessageService.createMessage(
+				input.from,
+				input.room,
+				{
+					payload: input.payload,
+				}
+			);
+			return {
+				flag: true,
+				result,
+			};
+		} catch (error) {
+			return {
+				flag: false,
+				errors: ['' + error],
+			};
+		}
+	}
 
-    @FieldResolver()
-    room(@Root() message: IResolverMessage) {
-        return RoomService.getRoomById(message.id);
-    }
+	@FieldResolver()
+	room(@Root() message: IResolverMessage) {
+		return RoomService.getRoomById(message.id);
+	}
 
-    @FieldResolver()
-    from(@Root() message: IResolverMessage) {
-        return UserService.getUserById(message.id);
-    }
+	@FieldResolver()
+	from(@Root() message: IResolverMessage) {
+		return UserService.getUserById(message.id);
+	}
 }

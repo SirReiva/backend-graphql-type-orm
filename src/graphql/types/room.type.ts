@@ -5,24 +5,24 @@ import { MessageType } from './message.type';
 
 @ObjectType('Room')
 export class RoomType implements IRoom {
-    @Field(() => ID, { nullable: false })
-    id!: string;
+	@Field(() => ID, { nullable: false })
+	id!: string;
 
-    @Field(() => ID, { nullable: false })
-    name!: string;
+	@Field(() => ID, { nullable: false })
+	name!: string;
 
-    @Field(() => [UserType], { nullable: false })
-    members!: UserType[];
+	@Field(() => [UserType], { nullable: false })
+	members!: UserType[];
 
-    @Field(() => [MessageType], { nullable: false })
-    messages!: MessageType[];
+	@Field(() => [MessageType], { nullable: false })
+	messages!: MessageType[];
 }
 
 @InputType()
 export class CreateRoomDto {
-    @Field(() => String)
-    name!: string;
+	@Field(() => String)
+	name!: string;
 
-    @Field(() => String)
-    creator!: string;
+	@Field(() => String)
+	creator!: string;
 }

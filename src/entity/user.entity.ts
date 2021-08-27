@@ -1,12 +1,12 @@
 import bcrypt from 'bcrypt';
 import {
-    BaseEntity,
-    BeforeInsert,
-    Column,
-    Entity,
-    ManyToMany,
-    OneToMany,
-    PrimaryGeneratedColumn,
+	BaseEntity,
+	BeforeInsert,
+	Column,
+	Entity,
+	ManyToMany,
+	OneToMany,
+	PrimaryGeneratedColumn,
 } from 'typeorm';
 import { IUser } from '../interfaces/user';
 import { MessageEntity } from './message.entity';
@@ -16,48 +16,48 @@ import config from '../config';
 
 @Entity()
 export class UserEntity extends BaseEntity implements IUser {
-    @BeforeInsert()
-    async onInsert() {
-        const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash(this.password, salt);
-        this.password = hash;
-    }
+	@BeforeInsert()
+	async onInsert() {
+		const salt = await bcrypt.genSalt(10);
+		const hash = await bcrypt.hash(this.password, salt);
+		this.password = hash;
+	}
 
-    @PrimaryGeneratedColumn('uuid')
-    id!: string;
+	@PrimaryGeneratedColumn('uuid')
+	id!: string;
 
-    @Column({
-        unique: true,
-    })
-    name!: string;
+	@Column({
+		unique: true,
+	})
+	name!: string;
 
-    @Column({ select: false })
-    password!: string;
+	@Column({ select: false })
+	password!: string;
 
-    @OneToMany((type) => MessageEntity, (message) => message.from)
-    messages!: (MessageEntity | string)[];
+	@OneToMany(type => MessageEntity, message => message.from)
+	messages!: (MessageEntity | string)[];
 
-    @Column({
-        default: 'nophoto.png',
-    })
-    avatar!: string;
+	@Column({
+		default: 'nophoto.png',
+	})
+	avatar!: string;
 
-    @ManyToMany((type) => RoomEntity, (room) => room.members)
-    rooms!: (RoomEntity | string)[];
+	@ManyToMany(type => RoomEntity, room => room.members)
+	rooms!: (RoomEntity | string)[];
 
-    comparePassword(unencryptedPassword: string): Promise<boolean> {
-        return bcrypt.compare(unencryptedPassword, this.password);
-    }
+	comparePassword(unencryptedPassword: string): Promise<boolean> {
+		return bcrypt.compare(unencryptedPassword, this.password);
+	}
 
-    generateJWT() {
-        return jwt.sign(
-            {
-                name: this.name,
-            },
-            config.JWT_SECRET,
-            {
-                expiresIn: config.JWT_LIFE,
-            }
-        );
-    }
+	generateJWT() {
+		return jwt.sign(
+			{
+				name: this.name,
+			},
+			config.JWT_SECRET,
+			{
+				expiresIn: config.JWT_LIFE,
+			}
+		);
+	}
 }
