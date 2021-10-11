@@ -14,16 +14,19 @@ export class MessageService {
 		idRoom: string,
 		messge: Partial<IMessage>
 	): Promise<MessageEntity> {
-		const from = await UserService.getUserById(idUser);
-		const room = await RoomService.getRoomById(idRoom);
+		const from = await UserService.getUserEnireById(idUser);
+		const room = await RoomService.getRoomEntireById(idRoom);
 
-		const message = await MessageService.messageRepository.create({
+		const message = MessageService.messageRepository.create({
 			...messge,
 			from,
 			room,
 		});
-		await message.save();
-		return await MessageService.getMessageById(message.id);
+		const msg = await message.save();
+		room.lastMessage = msg.id;
+		const res = await MessageService.getMessageById(message.id);
+		await room.save();
+		return res;
 	}
 
 	static getMesssgesByRoom(id: string) {

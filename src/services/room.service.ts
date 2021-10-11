@@ -31,6 +31,10 @@ export class RoomService {
 		});
 	}
 
+	static getRoomEntireById(id: string): Promise<RoomEntity> {
+		return RoomService.roomRepository.findOneOrFail(id);
+	}
+
 	static getRoomByIdAndUser(
 		idRoom: string,
 		user: UserEntity,

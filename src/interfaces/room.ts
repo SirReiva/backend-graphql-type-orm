@@ -6,6 +6,7 @@ export interface IRoom {
 	name: string;
 	members: (IUser | string)[];
 	messages?: (IMessage | string)[];
+	lastMessage?: IMessage | string;
 }
 
 export interface IResolverRoom extends IRoom {

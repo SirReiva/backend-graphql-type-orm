@@ -16,6 +16,9 @@ export class RoomType implements IRoom {
 
 	@Field(() => [MessageType], { nullable: false })
 	messages!: MessageType[];
+
+	@Field(() => MessageType, { nullable: true })
+	lastMessage!: MessageType;
 }
 
 @InputType()

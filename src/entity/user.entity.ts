@@ -42,7 +42,7 @@ export class UserEntity extends BaseEntity implements IUser {
 	})
 	avatar!: string;
 
-	@ManyToMany(type => RoomEntity, room => room.members)
+	@ManyToMany(_ => RoomEntity, room => room.members)
 	rooms!: (RoomEntity | string)[];
 
 	comparePassword(unencryptedPassword: string): Promise<boolean> {

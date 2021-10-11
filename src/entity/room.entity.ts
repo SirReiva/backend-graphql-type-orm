@@ -6,6 +6,8 @@ import {
 	ManyToMany,
 	JoinTable,
 	OneToMany,
+	JoinColumn,
+	OneToOne,
 } from 'typeorm';
 import { IRoom } from '../interfaces/room';
 import { UserEntity } from './user.entity';
@@ -19,12 +21,14 @@ export class RoomEntity extends BaseEntity implements IRoom {
 	@Column({ unique: true })
 	name!: string;
 
-	@ManyToMany(type => UserEntity, user => user.rooms, {
-		cascade: true,
-	})
+	@ManyToMany(type => UserEntity, user => user.rooms)
 	@JoinTable()
 	members!: (UserEntity | string)[];
 
 	@OneToMany(type => MessageEntity, message => message.room)
 	messages!: (MessageEntity | string)[];
+
+	@OneToOne(_ => MessageEntity, msg => msg.room)
+	@JoinColumn()
+	lastMessage!: MessageEntity | string;
 }

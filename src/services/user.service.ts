@@ -41,6 +41,10 @@ export class UserService {
 		});
 	}
 
+	static getUserEnireById(id: string): Promise<UserEntity> {
+		return UserService.userRepository.findOneOrFail(id);
+	}
+
 	static getUsersByRoom(id: string) {
 		return UserService.userRepository.findAndCount({
 			where: {
