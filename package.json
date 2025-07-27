@@ -25,7 +25,7 @@
         "typeorm": "^0.3.14"
     },
     "devDependencies": {
-        "@types/bcrypt": "5.0.2",
+        "@types/bcrypt": "6.0.0",
         "@types/express": "5.0.3",
         "@types/jsonwebtoken": "9.0.10",
         "@types/node": "22.16.3",
