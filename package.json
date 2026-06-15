@@ -17,7 +17,7 @@
         "bcrypt": "^6.0.0",
         "class-validator": "^0.14.0",
         "express": "^5.2.0",
-        "graphql": "^16.0.0",
+        "graphql": "^17.0.0",
         "jsonwebtoken": "^9.0.0",
         "mysql": "^2.18.1",
         "reflect-metadata": "^0.2.0",
